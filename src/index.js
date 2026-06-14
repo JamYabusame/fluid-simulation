@@ -324,11 +324,10 @@ window.addEventListener("mousemove", function (e) {
   mousePosition.x = (e.clientX / window.innerWidth) * 2 - 1;
   mousePosition.y = -(e.clientY / window.innerHeight) * 2 + 1;
 });
-window.addEventListener("keyup", function (e) {
-  if(e.keyCode === 32){
-    mode ^=1;
-    console.log("mode:", mode);
-  }
+window.addEventListener("click", (e) => {
+  const mode_val = document.getElementsByName("mode");
+  console.log("mode:", mode_val.item(0).checked);
+  mode = (mode_val.item(0).checked)? 1 : 0;
 });
 
 scene.add(camera);
