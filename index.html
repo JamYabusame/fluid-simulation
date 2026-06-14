@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="jp">
+  <head>
+    <title>Parametric Curve Tester</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <div id="info">
+      <h2>パラメトリック曲線を描いてみよう</h2>
+      <div id="control">
+        <input type="radio" name="curvetype" value="bezier" />Bezier
+        <input type="radio" name="curvetype" value="catmull" />Catmull-Rom
+        <button class="btn-outline" id="genbtn">Generate</button>
+        <button class="btn-outline2" id="okbtn">OK</button>
+      </div>
+    </div>
+    <script src="src/index.js"></script>
+  </body>
+</html>
