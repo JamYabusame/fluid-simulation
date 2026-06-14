@@ -1,2 +1,2 @@
-## Liquid Simulation on Three.js
+## Fluid Simulation on Three.js
 
