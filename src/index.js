@@ -17,7 +17,7 @@ document.body.appendChild(renderer.domElement);
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth/ window.innerHeight, 1, 2000);
-camera.position.set(2,2,2);
+camera.position.set(-2,2,0);
 
 // Lighting: ambient fill + hemisphere sky/ground + two directionals
 const ambientLight = new THREE.AmbientLight(0x6688aa, 0.7);
@@ -82,7 +82,7 @@ const _Wface = POLY6 * Math.pow(H2 - SPACING * SPACING, 3);
 const MASS = REST_DENSITY / (_Wself + 6 * _Wface);   // ≈ 0.638
 
 const GAS_CONST = 80;
-const VISCOSITY = 1.0;
+let VISCOSITY = document.getElementById("viscosity").value;
 const GRAVITY = -9.8;
 const DT = 0.005;
 const MAX_PARTICLES = 1500;
@@ -199,8 +199,10 @@ function computeForces() {
 
 // ---- Mouse interaction (mode 1) ----
 // Cast a ray from the camera, apply repulsive force to particles near the ray.
-const INTERACT_RADIUS = 0.5;
-const INTERACT_STRENGTH = 24000;
+//const INTERACT_RADIUS = 0.5;
+let INTERACT_RADIUS = document.getElementById("forcerad").value;
+//const INTERACT_STRENGTH = 24000;
+let INTERACT_STRENGTH = document.getElementById("forcestr").value;
 
 function applyMouseForce() {
   raycaster.setFromCamera(mousePosition, camera);
@@ -256,7 +258,7 @@ function sphStep() {
 // Color anchors for depth/density blending
 const _colorDeep = new THREE.Color(0x002266);  // deep bulk water
 const _colorMid  = new THREE.Color(0x0055bb);  // mid water
-const _colorSurf = new THREE.Color(0x55ddff);  // surface / low-density spray
+const _colorSurf = new THREE.Color(0x11ddff);  // surface / low-density spray
 const _c = new THREE.Color();
 
 function updateMesh() {
@@ -287,7 +289,7 @@ function initializeFluid() {
   const margin = PARTICLE_RADIUS;
   for (let x = BX_MIN + margin; x <= BX_MAX - margin; x += SPACING) {
     for (let y = BY_MIN + margin; y <= 0.45; y += SPACING) {
-      for (let z = BZ_MIN + margin; z <= BZ_MAX - margin; z += SPACING) {
+      for (let z = BZ_MIN + margin; z <= BZ_MAX/3 - margin; z += SPACING) {
         if (pos.length >= MAX_PARTICLES) return;
         pos.push(new THREE.Vector3(x, y, z));
         vel.push(new THREE.Vector3());
@@ -319,15 +321,20 @@ function autoSpawn() {
 let mode = 0;
 const mousePosition = new THREE.Vector2();
 const raycaster = new THREE.Raycaster();
-
+document.getElementsByName("mode").item(1).checked = true;
 window.addEventListener("mousemove", function (e) {
   mousePosition.x = (e.clientX / window.innerWidth) * 2 - 1;
   mousePosition.y = -(e.clientY / window.innerHeight) * 2 + 1;
 });
 window.addEventListener("click", (e) => {
   const mode_val = document.getElementsByName("mode");
-  console.log("mode:", mode_val.item(0).checked);
   mode = (mode_val.item(0).checked)? 1 : 0;
+});
+document.getElementById("init").addEventListener("click", (e) => {
+  pos.length =0;  
+  vel.length =0;
+  acc.length =0;
+  initializeFluid();
 });
 
 scene.add(camera);
@@ -340,6 +347,9 @@ function animate() {
   requestAnimationFrame(animate);
   controls.enabled = (mode === 0);
   controls.update();
+  VISCOSITY = document.getElementById("viscosity").value;
+  INTERACT_RADIUS = document.getElementById("forcerad").value;
+  INTERACT_STRENGTH = document.getElementById("forcestr").value;
   //autoSpawn();
   if (pos.length > 0) {
     sphStep();

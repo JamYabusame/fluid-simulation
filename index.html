@@ -7,10 +7,21 @@
   </head>
   <body>
     <div id="info">
-      <h2>Fluid Simulation</h2>
       <div id="control">
-        <input type="radio" name="mode" value="addforce" />Add Force
-        <input type="radio" name="mode" value="view" />View
+        <h2>Fluid Simulation</h2>
+        <input type="radio" name="mode" value="addforce" />interactive
+        <input type="radio" name="mode" value="view" />view
+        <br><br>
+        viscosity<br>
+        <input type = "range" id="viscosity" min="0" max= "50">
+        <br><br>
+        force strength<br>
+        <input type = "range" id="forcestr" min="0" max= "100000" step = "10000">
+        <br><br>
+        force radius<br>
+        <input type = "range" id="forcerad" min="0" max= "2" step = "0.1">
+        <br><br>
+        <button id = "init" class = "btn-outline">initialize</button>
       </div>
     </div>
     <script src="src/index.js"></script>
